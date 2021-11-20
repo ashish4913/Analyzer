@@ -8,5 +8,17 @@
 </head>
 <body>
     <img src="data:image/pgn;base64,{{chart|safe}}">
+    <br>
+    <br>
+    <img class="d-block w-100" style="margin-left: 40%;margin-top: 110px;width: 384px;height: 217px"  src="https://firebasestorage.googleapis.com/v0/b/analyzer-5d358.appspot.com/o/meter.png?alt=media&token=4b5bdb41-1e71-4bfc-bc15-93d9e203e751" alt="meter">
+    
+    <img class="d-block w-100" style="margin-right:20% ; margin-left: 56%;margin-top: -31%;  transform: rotate(180deg);transform-origin: 0%;width: 120px" src="https://firebasestorage.googleapis.com/v0/b/analyzer-5d358.appspot.com/o/needle.png?alt=media&token=7980637e-4fa8-43f6-9224-67333a609780" alt="needle">
+    
+    {% for key, values in similar.items %}
+    <h3>{{key}}</h3>
+    <h3>{{values}}</h3>
+    <hr>
+    {% endfor %}
+</h3>
 </body>
 </html>

@@ -1,6 +1,8 @@
 import matplotlib.pyplot as plt
 import base64
 from io import BytesIO
+import random
+import string
 
 def get_graph():
     buffer=BytesIO()
@@ -22,3 +24,4 @@ def get_plot(x,y):
     plt.title("Most important keywords")
     graph=get_graph()
     return graph
+
