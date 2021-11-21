@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
+   
     <!-- Compiled and minified CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 
@@ -22,14 +22,11 @@
 
 </head>
 <body>
+  <h1 style="font-family: 'M PLUS 1' sans-serif;font-size: 0.5cm; margin-left: 38%">Question Paper Analyzer ----Report</h1>
     <img src="data:image/pgn;base64,{{chart|safe}}">
     <br>
     <br>
-    <img class="d-block w-100" style="margin-left: 40%;margin-top: 110px;width: 384px;height: 217px"  src="https://firebasestorage.googleapis.com/v0/b/analyzer-5d358.appspot.com/o/meter.png?alt=media&token=4b5bdb41-1e71-4bfc-bc15-93d9e203e751" alt="meter">
     
-    <img class="d-block w-100" style="margin-right:20% ; margin-left: 54%;margin-top: -31%;  transform: rotate({{angle}}deg);transform-origin: 0%;width: 186px" src="https://firebasestorage.googleapis.com/v0/b/analyzer-5d358.appspot.com/o/needle.png?alt=media&token=7980637e-4fa8-43f6-9224-67333a609780" alt="needle">
-    <h3 style="font-family: 'M PLUS 1' sans-serif;font-size: 0.5cm; margin-left: 49%">Similarity Meter</h3>
-      
 
 
     <br>
@@ -37,7 +34,7 @@
     <table style="margin-left: 30px;" class="highlight">
       <thead>
         <tr>
-            <th>S.no</th>
+            
             <th style="padding-left: 20px;">Questions</th>
             <th>Similar Question</th>
             
@@ -46,21 +43,19 @@
       <tbody>
         {% for key, values in similar.items %}
         <tr>
-          <td>{{forloop.counter}}</td>
+          
           <td>{{key}}</td>
           <td>{{values}}</td>
           
         </tr>
         {% endfor %}
-        
       </tbody>
     </table>
-    
-    <h3 style="font-family: 'M PLUS 1' sans-serif;font-size: 0.5cm; margin-left: 38%">Important Questions Based on Keywords</h3>
+    <h3 style="font-family: 'M PLUS 1' sans-serif;font-size: 0.5cm; margin-left: 38%"> Important Questions Based on Keywords</h3>
     <table style="margin-left: 30px;" class="highlight">
       <thead>
         <tr>
-            <th>S.no</th>
+            
             <th style="padding-left: 20px;">Important Questions</th>
             
             
@@ -69,8 +64,9 @@
       <tbody>
         {% for i in imp %}
         <tr>
-          <td>{{forloop.counter}}</td>
-          <td>{{i}}</td>
+         
+          <td><b>{{forloop.counter}}</b> {{i}}</td>
+          
          
           
         </tr>
@@ -79,10 +75,8 @@
       </tbody>
     </table>
     
-    <p>
-      <a  style="margin-left: 40%;" href="{% url 'download' %}" class="waves-effect waves-light btn-large"> Download Report</a>
-      </p>
-</h3>
+
+  
 </body>
 
 </html>

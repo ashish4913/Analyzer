@@ -44,20 +44,22 @@
 
 
     </div>
-    <div style="margin-left:45%;margin-top: -30%;background-color:burlywood; margin-right: 30%;">
+    <div style="margin-left:45%;margin-top: -30%;background-color:rgb(126, 163, 241); margin-right: 30%; size: 60%;">
           <form method="post" action="{% url 'home' %}" enctype="multipart/form-data">
             {% csrf_token %}
               <div>
               <label for="paper1">Paper 1
-                  <input type="file" name="paper1" id="paper1">
+                  <input type="file" name="paper1" id="paper1" required>
               </label>
             </div>
             <div>
               <label for="paper2">Paper 2
-                <input type="file" name="paper2" id="paper2">
+                <input type="file" name="paper2" id="paper2" required>
             </label>
           </div>
-              <button type="submit">Submit</button>
+          <div class="d-grid gap-2 d-md-block">
+            <button style="margin-left: 36%; margin-top: 4%" class="btn btn-primary" type="submit">Analyze</button>
+          </div>
         </form>
     </div>
       

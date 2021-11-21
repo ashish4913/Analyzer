@@ -3,6 +3,7 @@ import base64
 from io import BytesIO
 import random
 import string
+from django.http import HttpResponse
 
 def get_graph():
     buffer=BytesIO()

@@ -18,6 +18,12 @@ from nltk.tokenize import word_tokenize
 from gensim.parsing.preprocessing import remove_stopwords
 from .utlis import get_plot
 from fuzzywuzzy import fuzz
+from django.http import HttpResponse
+from django.views.generic import View
+from django.http import HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+
 def convert_number(text):
     p = inflect.engine()
     # split string into list of words
@@ -133,7 +139,7 @@ def find_similar(arr1,arr2):
             try:
                 x=find_cosine(arr1[i],arr2[j])
 
-                if(x > 0.25 and  x < 0.60 and (abs(  len(arr1[i]) -   len(arr2[j])   )) in [0,1,2,3,4,5,6,7,8,9,10]  and len(arr1[i])>=10):
+                if(x > 0.25 and  x < 0.60 and (abs(  len(arr1[i]) -   len(arr2[j])   )) in [0,1,2,3,4,5,6,7,8,9,10]  and len(arr1[i])>=13):
                     #print(arr1[i])
                     #print(arr2[j])
                     data1.append(arr1[i])
@@ -143,6 +149,33 @@ def find_similar(arr1,arr2):
                 pass
     d=zip(data1,data2)            
     return d          
+class GeneratePDF(View):
+    def get(self, request, *args, **kwargs):
+        template = get_template('result.html')
+        
+        html = template.render(context)
+        pdf = render_to_pdf('result.html', context)
+        if pdf:
+            response = HttpResponse(pdf, content_type='application/pdf')
+            filename = "result%s.pdf" %("12341231")
+            content = "inline; filename='%s'" %(filename)
+            download = request.GET.get("download")
+            if download:
+                content = "attachment; filename='%s'" %(filename)
+            response['Content-Disposition'] = content
+            return response
+        return HttpResponse("Not found")
+def important_questions(arr,keywords):
+    imp=[]
+
+    for i in keywords:
+        for j in arr:
+           
+            if(i in j):
+                imp.append(j)
+    print(imp)
+    return list(set(imp))
+
 
 def home(request):
     if request.method=='POST':
@@ -195,10 +228,12 @@ def home(request):
                 q2.append(res2)
         #print(q1)
         #print(q2)
-        similar_questions=find_similar(q1,q2)
-        
-        ratio=len(dict(similar_questions))
 
+        similar_questions=find_similar(q1,q2)
+        similar_questions=dict(similar_questions)
+        ratio=len(similar_questions)
+        if(ratio>=180):
+            ratio=160
 
         
         res=preprocess(content)
@@ -212,10 +247,34 @@ def home(request):
         for i in keywords:
             lables.append(i[0])
             data.append(i[1])
+        q=q1+q2
         
-        chart=get_plot(lables,data)
-        
-  
+        imp=important_questions(q,lables)
        
-        return render(request,'result.html',{'chart':chart,'similar':dict(similar_questions)})
+        chart=get_plot(lables,data)
+        request.session['chart']=chart
+        request.session['angle']=180+2*ratio
+        request.session['similar']=similar_questions
+        request.session['imp']=imp
+        
+        
+       
+        return render(request,'result.html',{'chart':chart,'similar':dict(similar_questions),'angle':180+2*ratio,'imp':imp})
     return render(request,'home.html')
+
+def download_pdf(request):
+    template_path = 'report.html'
+    context = {'chart':request.session['chart'],'angle':request.session['angle'],'similar':request.session['similar'],'imp':request.session['imp']}
+    # Create a Django response object, and specify content_type as pdf
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="report.pdf"'
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(html, dest=response)
+    # if error then show some funy view
+    if pisa_status.err:
+       return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
